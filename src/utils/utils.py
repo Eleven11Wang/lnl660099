@@ -7,8 +7,8 @@ def write_ls(name,ls_to_write,folder_name = "./"):
         # store the data as binary data stream
         pickle.dump(ls_to_write, filehandle)
 
-def read_ls(name):
-    with open(str(name)+".txt", 'rb') as filehandle:
+def read_ls(name,folder_name = "./"):
+    with open(folder_name+str(name)+".txt", 'rb') as filehandle:
         # read the data as binary data stream
         placesList = pickle.load(filehandle)
     return placesList
@@ -23,11 +23,13 @@ def same_img(image_array,name,image_type="tif"):
         im.save("{}.png".format(name))
 
 def write_dict(name,dict_to_write,folder_name="./"):
-    with open(folder_name+'dict_data/{}.txt'.format(name), 'w') as outfile:
+    if folder_name[-1] != "/":
+        folder_name= folder_name+"/"
+    with open(folder_name+'{}.txt'.format(name), 'w') as outfile:
         json.dump(dict_to_write, outfile)
 
 def read_dict(name,folder_name="./"):
-    with open(folder_name+'dict_data/{}.txt'.format(name)) as json_file:
+    with open(folder_name+'{}.txt'.format(name)) as json_file:
         data = json.load(json_file)
     return data
 

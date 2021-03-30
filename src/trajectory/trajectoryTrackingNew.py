@@ -1,16 +1,37 @@
-from src.readLocalizationText import dataPoints
+from fileIO.readLocalizationText import dataPoints
 
 class dataTrajectory(dataPoints):
-    def __init__(self, name):
-        dataPoints.__init__(self, name)
-        self.traceDict = {}
-        self.lastPositionLs = []
-        self.nextIdx = 0
-        self.trajectory_distance=40
-        print("lens pf planeDict")
-        print(len(self.planeDict))
-        self.first_key = min(self.planeDict.keys())
 
+    """
+    This class is use for extract trajectory from data loaded
+    output :
+    "Dict {idx :List } ,[(plane,(posx,posy),intensity),(plane,(posx,posy),intensity)]"
+
+    todo : check whether duplicate plane were added to trace
+    """
+    def __init__(self, name=None):
+        if not name:
+            pass
+        else:
+            dataPoints.__init__(self, name)
+            self.traceDict = {}
+            self.lastPositionLs = []
+            self.nextIdx = 0
+            self.trajectory_distance=40
+            print("lens pf planeDict: ",len(self.planeDict))
+            self.first_key = min(self.planeDict.keys())
+            self.find_Trace()
+
+    def __str__(self):
+
+        return "Dict {idx :List } ,[(plane,(posx,posy),intensity),(plane,(posx,posy),intensity)]"
+
+
+    def get_trajectory_dict(self):
+        return self.traceDict
+
+    def get_info(self):
+        return {"height": self.height, "width" : self.width}
 
     def isSameSource(self, loc1, loc2):
         dis = (loc1[0] - loc2[0]) ** 2 + (loc1[1] - loc2[1]) ** 2
@@ -48,8 +69,6 @@ class dataTrajectory(dataPoints):
         for plane, posInfoLs in self.planeDict.items():
             if plane ==1:
                 continue
-            if plane % 5000 == 0:
-                print(str(plane) + "/" + str(self.planes))
             for i,posInfo in enumerate(posInfoLs):
 
 
@@ -75,5 +94,6 @@ class dataTrajectory(dataPoints):
                     trajectory_idx+=1
 
                 last_pos_ls.extend(append_ls)
-        print(trajectory_idx)
+        print("last trajectory_id: ",trajectory_idx)
+
 
