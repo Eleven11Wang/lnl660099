@@ -30,7 +30,7 @@ def stemPlot_and_fftPlot(stem_dict,fft_ls_dict,idx_ls=[],save_name= ""):
         c = c + 1
 
         plt.subplot(a, b, c)
-
+        plt.plot(fft_ls_dict[idx_ls[i]])
         c = c + 1
 
     plt.show()

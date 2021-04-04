@@ -1,8 +1,13 @@
-from trajectory.trajectory_functions import onState_analysis, offState_analysis,localization_analysis
+from trajectory.trajectory_functions import onState_analysis, offState_analysis, localization_analysis
 from fft.trajectory_fft import trajectory_fft
+from trajectoryProcessingFunctions import *
+import collections
+import numpy as np
 
 class trajectory_parm_maker():
-    def __init__(self):
+    def __init__(self, trajectory_plane_dict, trajectory_pos_dict):
+        self.trajectory_plane_dict = trajectory_plane_dict
+        self.trajectory_pos_dict = trajectory_pos_dict
 
     def make_parm_array(self):
         parm_ls_ls = []
@@ -33,7 +38,6 @@ class trajectory_parm_maker():
             cnt += 1
         return np.array(parm_ls_ls), pos_ls_dict
 
-
     def make_parm_name_ls(self):
         parm_name_ls = ["first frame time", "number_of_events"]
         for trajectory_id in self.trajectory_plane_dict.keys():
@@ -51,7 +55,6 @@ class trajectory_parm_maker():
             break
         return parm_name_ls
 
-
     def make_on_off_state_dict(self, key):
         trajectory = self.trajectory_plane_dict[key]
 
@@ -67,13 +70,11 @@ class trajectory_parm_maker():
 
         return first_frame, on_state_parm_dict, off_state_parm_dict
 
-
     def make_localization_info_dict(self, key):
         pos_ls = self.trajectory_pos_dict[key]
         pos_obj = localization_analysis(pos_ls)
         pos_parm_dict = self.get_env_vars(pos_obj)
         return pos_parm_dict
-
 
     def make_FFT_info_dict(self, key):
         FFT_ls = self.trajectory_plane_dict[key]
@@ -81,14 +82,14 @@ class trajectory_parm_maker():
         FFT_parm_dict = self.get_env_vars(FFT_obj)
         return FFT_parm_dict
 
-    def get_env_vars(self,cls):
+    def get_env_vars(self, cls):
         env_dict = collections.OrderedDict()
-        #print(dir(cls))
+        # print(dir(cls))
         for name in dir(cls):
-            attr = getattr(cls,name)
-            #print(attr)
-            if isinstance(attr,int):
+            attr = getattr(cls, name)
+            # print(attr)
+            if isinstance(attr, int):
                 env_dict[name] = attr
-            if isinstance(attr,float):
+            if isinstance(attr, float):
                 env_dict[name] = attr
         return env_dict

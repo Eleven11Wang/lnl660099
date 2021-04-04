@@ -1,18 +1,16 @@
-
-
-
-class trajectory_processing_functions():
+class trajectory_processing_functions:
     """
 
     function processing a single trajectory
     findContinuityPLanes : from framels to (start, duration) list, and return on state_len
-    cnt_ls2frameks : from (start duration) list to frame_ls
+    cnt_ls2_framels : from (start duration) list to frame_ls
     frame_ls2_stemls :from frame_ls to stem_ls (if blink 0, if not blink 1)
     link_frame_ls: link on state event in frame_ls(dealing fast blinking events)
     filter_continuity_planes: remove long stuck events in trajectory
     find_off_gap_length: find the length of gap
     """
-    def __init__(self,trajectory):
+
+    def __init__(self, trajectory):
         self.trajectory = trajectory
 
     @staticmethod
@@ -44,11 +42,10 @@ class trajectory_processing_functions():
                     cnt = 0
         return cntLs
 
-    def cnt_ls2_framels(self,cntls):
+    def cnt_ls2_framels(self, cntls):
         start_pos = cntls[::2]
         on_state_len = cntls[1::2]
-        frame_ls =[]
-
+        frame_ls = []
 
         for idx, start_pos in enumerate(start_pos):
             continueLens = on_state_len[idx]
@@ -56,15 +53,14 @@ class trajectory_processing_functions():
         return frame_ls
 
     @staticmethod
-    def frame_ls2_stemls(framels,last_pos = 1024-1):
-        if last_pos == -1 :
-
+    def frame_ls2_stemls(framels, last_pos=1024 - 1):
+        if last_pos == -1:
             last_pos = framels[-1]
-        data = [0] * (last_pos+1)
+        data = [0] * (last_pos + 1)
         for x in framels:
             if x > last_pos:
                 break
-            data[x - 1] = 1
+            data[x] = 1
         return data
 
     def link_frame_ls(cntLs, linklength):
@@ -119,4 +115,3 @@ class trajectory_processing_functions():
             st += 2
 
         return off_state_len
-
