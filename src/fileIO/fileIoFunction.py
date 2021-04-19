@@ -1,7 +1,7 @@
 import glob
 import os
-from trajectory.trajectoryTrackingNew import dataTrajectory
-
+#from trajectory.trajectoryTrackingNew import dataTrajectory
+from trajectory.multi_trajectory_tracking import dataTrajectory
 
 def read_allfiles_infolder(path = '/some/path/to/file'):
     print("doc of data_trajectory: ",dataTrajectory.__doc__)
@@ -19,6 +19,18 @@ def read_allfiles_infolder(path = '/some/path/to/file'):
     return data_trajectory_dict_ls
 
 
+def read_a_file_by_absolute_path(absolute_path):
+    ob_data = dataTrajectory(absolute_path)
+    data_trajectory_dict = ob_data.get_trajectory_dict()
+    filted_data_trajectory_dict = {}
+    for k, v in data_trajectory_dict.items():
+        if len(v) > 3:  # filter cnt < 3
+            filted_data_trajectory_dict[k] = v
+    print(ob_data.get_info())
+    print("\n")
+
+
+
 def read_allfiles_infolder_toAdict(path = '/some/path/to/file'):
     print("doc of data_trajectory: ",dataTrajectory.__doc__)
     trajectory_dataDict={}
@@ -29,13 +41,17 @@ def read_allfiles_infolder_toAdict(path = '/some/path/to/file'):
         filename = os.path.join(os.getcwd(), filename)
         ob_data=dataTrajectory(filename)
         data_trajectory_dict = ob_data.get_trajectory_dict()
+        filted_data_trajectory_dict = {}
+        for k,v in data_trajectory_dict.items():
+            if len(v) > 3: # filter cnt < 3
+                filted_data_trajectory_dict[k]=v
         print(ob_data.get_info())
         print("\n")
         for k,v in data_trajectory_dict.items():
             trajectory_dataDict[global_idx_num]=v
             global_idx_num+=1
         file_name_ls.append(filename)
-    return trajectory_dataDict
+    return filted_data_trajectory_dict
 
 def read_a_expample_file_in_folder(path):
     print("doc of data_trajectory: ", dataTrajectory.__doc__)
